@@ -29,7 +29,7 @@ export default function LandingPage() {
   };
 
   const handleLearnMoreClick = () => {
-    navigate("/Features");
+    navigate("/learnmore");
   };
 
   return (

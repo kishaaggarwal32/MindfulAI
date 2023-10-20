@@ -1,65 +1,88 @@
 import React from 'react';
-import styled from 'styled-components';
+import { Box, SimpleGrid, Icon, Text, Stack, Flex } from '@chakra-ui/react';
+import { FaBrain,FaRobot,FaUserFriends , FaPhone ,FaShieldAlt ,FaComment} from 'react-icons/fa';
 
-const FeaturesContainer = styled.div`
-  color: #fff; /* Text color */
-  background: linear-gradient(to bottom, #EF5350, #E57373); /* Red gradient background */
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  font-family: Arial, sans-serif;
-`;
-
-const FeatureList = styled.ol`
-  list-style-type: decimal;
-  padding-left: 20px;
-`;
-
-const FeatureItem = styled.li`
-  margin: 10px 0;
-`;
-
-const Features = () => {
+function Features({ title, text, icon }) {
   return (
-    <FeaturesContainer>
-      <h2>Introduction:</h2>
-      <p>
-        Welcome to Mindful AI, we're on a mission to empower you with tools and insights to enhance your mental health. We understand that your mental well-being is precious, and we're here to support you on your journey to a happier and healthier life.
-      </p>
 
-      <h2>What We Do:</h2>
-      <FeatureList>
-        <FeatureItem>
-          <strong>Mental Health Assessment:</strong> At Mindful AI, we offer a comprehensive mental health assessment tool. This tool helps you gain insights into your mental well-being by answering a series of questions. It's the first step towards understanding yourself better.
-        </FeatureItem>
-        <FeatureItem>
-          <strong>Personalized Guidance:</strong> Based on the results of your assessment, we provide you with personalized mindfulness exercises, relaxation techniques, and coping strategies. These recommendations are designed to help you manage stress, anxiety, and other mental health challenges effectively.
-        </FeatureItem>
-        <FeatureItem>
-          <strong>Chatbot Support:</strong> Our AI chatbot is here to offer real-time mental health support. Whether you have questions, need someone to talk to, or require assistance with specific issues like stress, anxiety, or depression, our chatbot is available to listen and provide guidance.
-        </FeatureItem>
-        <FeatureItem>
-          <strong>Crisis Helplines and Resources:</strong> We understand that sometimes you might need immediate help. That's why we offer a list of crisis helplines and local mental health resources. These are invaluable in emergencies and when you need the support of human professionals.
-        </FeatureItem>
-        <FeatureItem>
-          <strong>Data Privacy and Security:</strong> Your privacy is a top priority for us. Your assessment data and personal information are stored securely, following strict data protection regulations, ensuring your confidentiality.
-        </FeatureItem>
-        <FeatureItem>
-          <strong>Feedback-Driven Improvement:</strong> We value your input. Your feedback drives the continuous enhancement of our platform, making it even more useful for you and others.
-        </FeatureItem>
-      </FeatureList>
-
-      <h2>Our Mission:</h2>
-      <p>
-        Our mission is to make mental well-being accessible to everyone. We believe that understanding and nurturing your mental health is essential for a fulfilling life.
-      </p>
-
-      <h2>Conclusion:</h2>
-      <p>
-        Explore Mindful AI further to take control of your mental health journey. We are here to support, guide, and empower you along the way.
-      </p>
-    </FeaturesContainer>
+    <Stack>
+         <Box
+      p={7}
+      borderWidth="2px" // Add a border around the entire card
+      borderColor="red.300" // Specify the border color
+      borderRadius="xl"
+      boxShadow="xl" // Add a shadow to the box
+      height="100%" // Add rounded corners
+      bg="whitesmoke"
+    >
+      <Flex
+        w={16}
+        h={16}
+        align={'center'}
+        justify={'center'}
+        color={'white'}
+        rounded={'full'}
+        bg={'red.400'}
+        mb={1}
+      >
+        {icon}
+      </Flex>
+      <Text fontWeight={920}>{title}</Text>
+      <Text color={'gray.600'}>{text}</Text>
+      </Box>
+    </Stack>
+    
   );
 }
 
-export default Features;
+export default function SimpleThreeColumns() {
+  return (
+    <Box p={75} marginTop={70}>
+      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={90}>
+        <Features
+          icon={<Icon as={FaBrain} w={10} h={10} />}
+          title={'Mental Heath Assessment'}
+          text={
+            'At Mindful AI, we offer a comprehensive mental health assessment tool. This tool helps you gain insights into your mental well-being by answering a series of questions. Its the first step towards understanding yourself better.'
+          }
+        />
+        <Features
+          icon={<Icon as={FaRobot} w={10} h={10} />}
+          title={'ChatBot Support'}
+          text={
+            'Our AI chatbot is here to offer real-time mental health support. Whether you have questions, need someone to talk to, or require assistance with specific issues like stress, anxiety, or depression, our chatbot is available to listen and provide guidance.'
+          }
+        />
+        <Features
+          icon={<Icon as={FaUserFriends} w={10} h={10} />}
+          title={'Personalized Guidance'}
+          text={
+        'Based on the results of your assessment, we provide you with personalized mindfulness exercises, relaxation techniques, and coping strategies. These recommendations are designed to help you manage stress, anxiety, and other mental health challenges effectively.'
+          }
+        />
+        <Features
+          icon={<Icon as={FaPhone} w={10} h={10} />}
+          title={'Crisis Helplines and Resources'}
+          text={
+            'We understand that sometimes you might need immediate help. Thats why we offer a list of crisis helplines and local mental health resources. These are invaluable in emergencies and when you need the support of human professionals.'
+          }
+        />
+        <Features
+          icon={<Icon as={FaShieldAlt} w={10} h={10} />}
+          title={'Data Privacy and Security'}
+          text={
+            'Your privacy is a top priority for us. Your assessment data and personal information are stored securely, following strict data protection regulations, ensuring your confidentiality.'
+          }
+        />
+        <Features
+          icon={<Icon as={FaComment} w={10} h={10} />}
+          title={'Feedback-Driven Improvement'}
+          text={
+            'We value your input. Your feedback drives the continuous enhancement of our platform, making it even more useful for you and others.'
+          }
+        />
+
+      </SimpleGrid>
+    </Box>
+  );
+}

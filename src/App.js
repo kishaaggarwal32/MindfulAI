@@ -7,9 +7,11 @@ import Chat from "./pages/Chat";
 import { Wrapper } from "./components/Wrapper";
 import Form from "./pages/Form";
 import Dashboard from "./pages/Dashboard";
+import {AuthProvider} from "./context/AuthContext";
 
 function App() {
   return (
+  <AuthProvider>
     <ChakraProvider>
       <div className="App">
         <Routes>
@@ -49,6 +51,7 @@ function App() {
         </Routes>
       </div>
     </ChakraProvider>
+  </AuthProvider>
   );
 }
 

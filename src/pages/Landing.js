@@ -1,3 +1,6 @@
+import React, { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 import {
   Container,
   Stack,
@@ -9,10 +12,13 @@ import {
   Image,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { supabase } from "../supabase"; // Import the Supabase client
+import { supabase } from "../supabase";
 import { Icon } from "@chakra-ui/icons";
 
-export default function LandingPage() {
+export default function Landing() {
+  const { user, signIn } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   const handleSignIn = async () => {
     const { user, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
@@ -22,6 +28,12 @@ export default function LandingPage() {
       console.error("Authentication error:", error.message);
     } else {
       console.log("User signed in:", user);
+
+      // Set the user in the context
+      signIn(user);
+
+      // Redirect to the Home page after a successful sign-in
+      navigate("/home");
     }
   };
 
@@ -67,18 +79,33 @@ export default function LandingPage() {
             spacing={{ base: 4, sm: 6 }}
             direction={{ base: "column", sm: "row" }}
           >
-            <Button
-              rounded={"full"}
-              size={"lg"}
-              fontWeight={"normal"}
-              px={6}
-              colorScheme={"red"}
-              bg={"red.400"}
-              _hover={{ bg: "red.500" }}
-              onClick={handleSignIn}
-            >
-              Get started
-            </Button>
+            {user ? (
+              <Button
+                rounded={"full"}
+                size={"lg"}
+                fontWeight={"normal"}
+                px={6}
+                colorScheme={"red"}
+                bg={"red.400"}
+                _hover={{ bg: "red.500" }}
+                onClick={() => navigate("/home")} // Redirect if user is already authenticated
+              >
+                Welcome, {user.email}
+              </Button>
+            ) : (
+              <Button
+                rounded={"full"}
+                size={"lg"}
+                fontWeight={"normal"}
+                px={6}
+                colorScheme={"red"}
+                bg={"red.400"}
+                _hover={{ bg: "red.500" }}
+                onClick={handleSignIn}
+              >
+                Get started
+              </Button>
+            )}
             <Button rounded={"full"} size={"lg"} fontWeight={"normal"} px={6}>
               Learn More
             </Button>
@@ -114,7 +141,7 @@ export default function LandingPage() {
               align={"center"}
               w={"100%"}
               h={"100%"}
-              src={"/landingimg2.jpg"} // Use the correct image path
+              src={"/landingimg2.jpg"}
             />
           </Box>
         </Flex>

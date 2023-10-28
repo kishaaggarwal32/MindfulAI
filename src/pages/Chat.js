@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Box, Flex, Avatar, Text, Input, Button } from "@chakra-ui/react";
-import { backendAPIInstance } from "../constants/axios";
-import { AuthContext } from "../context/AuthContext"; // Import your AuthContext
+import axios from "axios"; // Import axios
+import { AuthContext } from "../context/AuthContext";
 
 const Chat = () => {
   const { user } = useContext(AuthContext);
@@ -31,7 +31,7 @@ const Chat = () => {
       };
 
       // Make a POST request to your chatbot service
-      const response = await backendAPIInstance.post(
+      const response = await axios.post(
         "https://hackathon-mindfulai.azurewebsites.net/ai/chat",
         requestBody,
         config
@@ -42,55 +42,53 @@ const Chat = () => {
       setChats(newChats);
       setMessage("");
     } catch (error) {
-      console.log("error in sending message -->", error);
+      console.error("Error in sending message -->", error);
     }
   };
 
   return (
-    <Box backgroundColor={"white"}>
+    <Box backgroundColor="white">
       <Box
-        height={"75vh"}
-        maxHeight={"75vh"}
-        scrollBehavior={"smooth"}
-        overflow={"scroll"}
-        padding={"20px"}
+        height="75vh"
+        maxHeight="75vh"
+        scrollBehavior="smooth"
+        overflow="scroll"
+        padding="20px"
       >
-        {chats.map((chat, index) => {
-          return (
-            <Box key={index}>
-              <Flex marginBottom={"20px"}>
-                <Avatar
-                  size="sm"
-                  name="User Avatar"
-                  src="https://cdn-icons-png.flaticon.com/512/6596/6596121.png"
-                  marginRight={"10px"}
-                />
-                <Text as="span" fontSize={"md"}>
-                  {chat.customer}
-                </Text>
-              </Flex>
-              <Flex marginBottom={"20px"}>
-                <Avatar
-                  size="sm"
-                  name="Bot Avatar"
-                  src="https://static.vecteezy.com/system/resources/previews/010/054/157/original/chat-bot-robot-avatar-in-circle-round-shape-isolated-on-white-background-stock-illustration-ai-technology-futuristic-helper-communication-conversation-concept-in-flat-style-vector.jpg"
-                  marginRight={"10px"}
-                />
-                <Text as="span"> {chat.agent}</Text>
-              </Flex>
-            </Box>
-          );
-        })}
+        {chats.map((chat, index) => (
+          <Box key={index}>
+            <Flex marginBottom="20px">
+              <Avatar
+                size="sm"
+                name="User Avatar"
+                src="https://cdn-icons-png.flaticon.com/512/6596/6596121.png"
+                marginRight="10px"
+              />
+              <Text as="span" fontSize="md">
+                {chat.customer}
+              </Text>
+            </Flex>
+            <Flex marginBottom="20px">
+              <Avatar
+                size="sm"
+                name="Bot Avatar"
+                src="https://static.vecteezy.com/system/resources/previews/010/054/157/original/chat-bot-robot-avatar-in-circle-round-shape-isolated-on-white-background-stock-illustration-ai-technology-futuristic-helper-communication-conversation-concept-in-flat-style-vector.jpg"
+                marginRight="10px"
+              />
+              <Text as="span"> {chat.agent}</Text>
+            </Flex>
+          </Box>
+        ))}
       </Box>
-      <Box height={"10vh"} padding={"10px"}>
-        <Flex direction={"row"}>
+      <Box height="10vh" padding="10px">
+        <Flex direction="row">
           <Input
             placeholder="Enter your message"
             onChange={(e) => setMessage(e.target.value)}
-            marginRight={"20px"}
+            marginRight="20px"
             value={message}
           />
-          <Button colorScheme="red" size={"md"} onClick={() => sendMessage()}>
+          <Button colorScheme="red" size="md" onClick={() => sendMessage()}>
             Send
           </Button>
         </Flex>

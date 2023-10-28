@@ -16,25 +16,17 @@ import { supabase } from "../supabase";
 import { Icon } from "@chakra-ui/icons";
 
 export default function Landing() {
-  const { user, signIn } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSignIn = async () => {
-    const { user, error } = await supabase.auth.signInWithOAuth({
+    await supabase.auth.signInWithOAuth({
       provider: "google",
+      options: {
+        redirectTo: `${process.env.REACT_APP_BASE_URL}/home`,
+        skipBrowserRedirect: false,
+      },
     });
-
-    if (error) {
-      console.error("Authentication error:", error.message);
-    } else {
-      console.log("User signed in:", user);
-
-      // Set the user in the context
-      signIn(user);
-
-      // Redirect to the Home page after a successful sign-in
-      navigate("/home");
-    }
   };
 
   return (

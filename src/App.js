@@ -1,21 +1,34 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
-import { ChakraProvider } from "@chakra-ui/react";
 import Landing from "./pages/Landing";
 import Home from "./pages/Home";
 import Chat from "./pages/Chat";
 import { Wrapper } from "./components/Wrapper";
 import Form from "./pages/Form";
 import Dashboard from "./pages/Dashboard";
-import {AuthProvider} from "./context/AuthContext";
+import { supabase } from "./supabase";
+import { AuthContext } from "./context/AuthContext";
 
 function App() {
+  const { user, signIn } = useContext(AuthContext);
+
+  const isLoggedIn = user !== null;
+
+  useEffect(() => {
+    async function getUser() {
+      const { data } = await supabase.auth.getUser();
+      if (data.user) {
+        signIn(data.user);
+      }
+    }
+    getUser();
+  }, [signIn]);
+
   return (
-  <AuthProvider>
-    <ChakraProvider>
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<Landing />} />
+    <Routes>
+      <Route path="/" element={<Landing />} />
+      {isLoggedIn && (
+        <>
           <Route
             path="/home"
             element={
@@ -48,10 +61,9 @@ function App() {
               </Wrapper>
             }
           />
-        </Routes>
-      </div>
-    </ChakraProvider>
-  </AuthProvider>
+        </>
+      )}
+    </Routes>
   );
 }
 

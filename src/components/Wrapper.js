@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Outlet, NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   IconButton,
   Avatar,
@@ -19,12 +19,11 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
-  Container,
 } from "@chakra-ui/react";
 import { FiMenu, FiChevronDown } from "react-icons/fi";
 import { BsFillChatLeftFill, BsFillCheckSquareFill } from "react-icons/bs";
 import { AuthContext } from "../context/AuthContext";
-
+import { supabase } from "../supabase";
 const LinkItems = [
   { name: "Chat", icon: BsFillChatLeftFill, route: "/chat" },
   { name: "Form", icon: BsFillCheckSquareFill, route: "/form" },
@@ -96,7 +95,7 @@ const NavItem = ({ icon, children, ...rest }) => {
 };
 
 const MobileNav = ({ onOpen, ...rest }) => {
-  const { user } = useContext(AuthContext);
+  const { user, signOut } = useContext(AuthContext);
   const navigate = useNavigate();
 
   return (
@@ -168,11 +167,10 @@ const MobileNav = ({ onOpen, ...rest }) => {
               <MenuItem>Settings</MenuItem>
               <MenuDivider />
               <MenuItem
-                onClick={() => {
-                  localStorage.removeItem("square_hackathon_access_token");
-                  localStorage.removeItem("square_hackathon_seller_location");
-                  // sellerLogout();
-                  navigate("/login");
+                onClick={async () => {
+                  await supabase.auth.signOut();
+                  signOut();
+                  navigate("/");
                 }}
               >
                 Sign out
@@ -210,9 +208,9 @@ const SidebarWithHeader = ({ children }) => {
       <MobileNav onOpen={onOpen} />
       <Box ml={{ base: 0, md: 60 }} p="4">
         {/* Content */}
-        <Outlet>
-          <Container>{children}</Container>
-        </Outlet>
+        {/* <Outlet> */}
+        {children}
+        {/* </Outlet> */}
       </Box>
     </Box>
   );

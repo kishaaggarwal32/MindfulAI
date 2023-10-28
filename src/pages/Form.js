@@ -2,6 +2,7 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
+import { Box, Button, Heading, Text } from "@chakra-ui/react";
 
 const Form = () => {
   const { user } = useContext(AuthContext);
@@ -97,29 +98,44 @@ const Form = () => {
   };
 
   return (
-    <div>
-      <h2>Personality Questionnaire</h2>
-      <p>
-        Rate each statement from 1 (Strongly Disagree) , 2 (Disagree) ,
-        3(Neutral) , 4 (Agree) , 5 (Strongly Agree)
-      </p>
-      <form>
-        {questions.map((question, index) => (
-          <div key={index}>
-            <h3>{question}</h3>
-            <Options
-              questionId={index}
-              selectedOption={responses[index]}
-              onOptionChange={handleResponseChange}
-            />
-          </div>
-        ))}
-        <button onClick={handleSubmit}>Submit</button>
-      </form>
-    </div>
+    <Box
+      p="4"
+      borderWidth="2px"
+      borderColor="red.400"
+      borderRadius="lg"
+      textAlign="center"
+    >
+      <Heading as="h2" fontSize="xl" mb="4">
+        Personality Questionnaire
+      </Heading>
+      <Text fontSize="lg" fontWeight="bold" mb="2" textAlign="justify">
+        Rate each statement from 1 (Strongly Disagree), 2 (Disagree), 3
+        (Neutral), 4 (Agree), 5 (Strongly Agree)
+      </Text>
+
+      {questions.map((question, index) => (
+        <Box key={index} mt="4" textAlign="justify">
+          <Text fontSize="xl">{question}</Text>
+          <Options
+            questionId={index}
+            selectedOption={responses[index]}
+            onOptionChange={handleResponseChange}
+          />
+        </Box>
+      ))}
+
+      <Button
+        colorScheme="red"
+        mt="4"
+        mx="auto"
+        display="block"
+        onClick={handleSubmit}
+      >
+        Submit
+      </Button>
+    </Box>
   );
 };
-
 const Options = ({ questionId, selectedOption, onOptionChange }) => {
   const options = [1, 2, 3, 4, 5]; // Numeric values correspond to "Strongly Disagree" to "Strongly Agree"
 

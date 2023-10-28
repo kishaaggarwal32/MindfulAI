@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import {
@@ -16,22 +16,16 @@ import { supabase } from "../supabase";
 import { Icon } from "@chakra-ui/icons";
 
 export default function Landing() {
-  const { user, signIn } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
-  useEffect(() => {
-    const value = JSON.parse(
-      localStorage.getItem("sb-kgpmxfqutszzupcopzab-auth-token")
-    );
-
-    if (value && value.access_token) {
-      signIn();
-      navigate("/home");
-    }
-  }, [navigate, signIn]);
 
   const handleSignIn = async () => {
     await supabase.auth.signInWithOAuth({
       provider: "google",
+      options: {
+        redirectTo: `${process.env.REACT_APP_BASE_URL}/home`,
+        skipBrowserRedirect: false,
+      },
     });
   };
 

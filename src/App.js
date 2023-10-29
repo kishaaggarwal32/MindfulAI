@@ -8,6 +8,7 @@ import Form from "./pages/Form";
 import Dashboard from "./pages/Dashboard";
 import { supabase } from "./supabase";
 import { AuthContext } from "./context/AuthContext";
+import SimpleThreeColumns from "./pages/Features";
 
 function App() {
   const { user, signIn } = useContext(AuthContext);
@@ -37,6 +38,7 @@ function App() {
               </Wrapper>
             }
           />
+          <Route path="/learnmore" element={<SimpleThreeColumns/>} />
           <Route
             path="/chat"
             element={

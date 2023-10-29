@@ -1,8 +1,15 @@
-// Form.js
 import React, { useContext, useState } from "react";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
-import { Box, Button, Heading, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Heading,
+  Text,
+  Stack,
+  Alert,
+  AlertIcon,
+} from "@chakra-ui/react";
 
 const Form = () => {
   const { user } = useContext(AuthContext);
@@ -60,6 +67,8 @@ const Form = () => {
   ];
 
   const [responses, setResponses] = useState({});
+  const [errorAlert, setErrorAlert] = useState(false);
+  const [successAlert, setSuccessAlert] = useState(false);
 
   const handleResponseChange = (questionId, response) => {
     setResponses({
@@ -69,12 +78,10 @@ const Form = () => {
   };
 
   const handleSubmit = (event) => {
-    event.preventDefault(); // Prevent the default form submission behavior (page refresh)
+    event.preventDefault();
 
-    // Create a string representing the responses
     const responseData = Object.values(responses).join("");
 
-    // Make the API POST request
     axios
       .post(
         "https://hackathon-mindfulai.azurewebsites.net/mongo_db/write_to_mongo",
@@ -88,56 +95,75 @@ const Form = () => {
         }
       )
       .then((response) => {
-        // Handle the response from the server, e.g., show a success message
         console.log("Response:", response.data);
+        setSuccessAlert(true); // Show success alert on successful submission
       })
       .catch((error) => {
-        // Handle errors, e.g., show an error message
         console.error("Error:", error);
+        setErrorAlert(true); // Show error alert on submission error
       });
   };
 
   return (
-    <Box
-      p="4"
-      borderWidth="2px"
-      borderColor="red.400"
-      borderRadius="lg"
-      textAlign="center"
-    >
-      <Heading as="h2" fontSize="xl" mb="4">
-        Personality Questionnaire
-      </Heading>
-      <Text fontSize="lg" fontWeight="bold" mb="2" textAlign="justify">
-        Rate each statement from 1 (Strongly Disagree), 2 (Disagree), 3
-        (Neutral), 4 (Agree), 5 (Strongly Agree)
-      </Text>
+    <div>
+      <Stack spacing={3}>
+        {errorAlert && (
+          <Alert status="error">
+            <AlertIcon />
+            There was an error processing your request
+          </Alert>
+        )}
 
-      {questions.map((question, index) => (
-        <Box key={index} mt="4" textAlign="justify">
-          <Text fontSize="xl">{question}</Text>
-          <Options
-            questionId={index}
-            selectedOption={responses[index]}
-            onOptionChange={handleResponseChange}
-          />
-        </Box>
-      ))}
+        {successAlert && (
+          <Alert status="success">
+            <AlertIcon />
+            Form Submitted Successfully , Proceed to chat . Fire On !
+          </Alert>
+        )}
+      </Stack>
 
-      <Button
-        colorScheme="red"
-        mt="4"
-        mx="auto"
-        display="block"
-        onClick={handleSubmit}
+      <Box
+        p="4"
+        borderWidth="2px"
+        borderColor="red.400"
+        borderRadius="lg"
+        textAlign="center"
       >
-        Submit
-      </Button>
-    </Box>
+        <Heading as="h2" fontSize="xl" mb="4">
+          Personality Questionnaire
+        </Heading>
+        <Text fontSize="lg" fontWeight="bold" mb="2" textAlign="justify">
+          Rate each statement from 1 (Strongly Disagree), 2 (Disagree), 3
+          (Neutral), 4 (Agree), 5 (Strongly Agree)
+        </Text>
+
+        {questions.map((question, index) => (
+          <Box key={index} mt="4" textAlign="justify">
+            <Text fontSize="xl">{question}</Text>
+            <Options
+              questionId={index}
+              selectedOption={responses[index]}
+              onOptionChange={handleResponseChange}
+            />
+          </Box>
+        ))}
+
+        <Button
+          colorScheme="red"
+          mt="4"
+          mx="auto"
+          display="block"
+          onClick={handleSubmit}
+        >
+          Submit
+        </Button>
+      </Box>
+    </div>
   );
 };
+
 const Options = ({ questionId, selectedOption, onOptionChange }) => {
-  const options = [1, 2, 3, 4, 5]; // Numeric values correspond to "Strongly Disagree" to "Strongly Agree"
+  const options = [1, 2, 3, 4, 5];
 
   return (
     <div>

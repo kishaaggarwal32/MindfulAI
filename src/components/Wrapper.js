@@ -97,6 +97,9 @@ const NavItem = ({ icon, children, ...rest }) => {
 const MobileNav = ({ onOpen, ...rest }) => {
   const { user, signOut } = useContext(AuthContext);
   const navigate = useNavigate();
+  const navigateToHome = () => {
+    navigate("/home");
+  };
 
   return (
     <Flex
@@ -148,10 +151,12 @@ const MobileNav = ({ onOpen, ...rest }) => {
                   ml="2"
                 >
                   <Text fontSize="sm">
-                    {user ? user.name : "Guest"} {/* Check if user is null */}
+                    {user ? user.user_metadata.full_name : "Guest"}{" "}
+                    {/* Check if user is null */}
                   </Text>
                   <Text fontSize="xs" color="gray.600">
-                    Admin
+                    {user ? "User" : "Guest"}{" "}
+                    {/* Display "User" if user is logged in, else "Guest" */}
                   </Text>
                 </VStack>
                 <Box display={{ base: "none", md: "flex" }}>
@@ -163,7 +168,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
               bg={useColorModeValue("white", "gray.900")}
               borderColor={useColorModeValue("gray.200", "gray.700")}
             >
-              <MenuItem>Profile</MenuItem>
+              <MenuItem onClick={navigateToHome}>Profile</MenuItem>
               <MenuItem>Settings</MenuItem>
               <MenuDivider />
               <MenuItem

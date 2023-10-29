@@ -71,7 +71,7 @@ export default function Home() {
 
   return (
     <Container>
-      <Text fontSize="2xl" textAlign="center" mt="4">
+      <Text fontSize="2xl" textAlign="center" mt="4" mb="5">
         Welcome to MindFulAI
       </Text>
       {user ? (

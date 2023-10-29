@@ -168,16 +168,22 @@ const Options = ({ questionId, selectedOption, onOptionChange }) => {
   return (
     <div>
       {options.map((option) => (
-        <label key={option}>
+        <>
           <input
+            style={{ cursor: "pointer" }}
             type="radio"
             name={questionId}
             value={option}
             checked={selectedOption === option}
             onChange={() => onOptionChange(questionId, option)}
           />
-          {option}
-        </label>
+          <label
+            key={option}
+            style={{ paddingRight: "10px", paddingLeft: "5px" }}
+          >
+            {option}
+          </label>
+        </>
       ))}
     </div>
   );

@@ -20,7 +20,7 @@ import {
   MenuItem,
   MenuList,
 } from "@chakra-ui/react";
-import { FaHome } from "react-icons/fa";
+import {FaArrowRight, FaHome} from "react-icons/fa";
 import { FiMenu, FiChevronDown } from "react-icons/fi";
 import { BsFillChatLeftFill, BsFillCheckSquareFill } from "react-icons/bs";
 import { AuthContext } from "../context/AuthContext";
@@ -29,8 +29,9 @@ import ProfileModal from "./PofileModal";
 
 const LinkItems = [
   { name: "Home", icon: FaHome, route: "/home" },
-  { name: "Chat", icon: BsFillChatLeftFill, route: "/chat" },
   { name: "Form", icon: BsFillCheckSquareFill, route: "/form" },
+  { name: "Chat", icon: BsFillChatLeftFill, route: "/chat" },
+  {name: "LearnMore", icon: FaArrowRight ,route: "/learnmore"}
 ];
 
 const SidebarContent = ({ onClose, ...rest }) => {

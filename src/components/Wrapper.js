@@ -25,6 +25,8 @@ import { FiMenu, FiChevronDown } from "react-icons/fi";
 import { BsFillChatLeftFill, BsFillCheckSquareFill } from "react-icons/bs";
 import { AuthContext } from "../context/AuthContext";
 import { supabase } from "../supabase";
+import ProfileModal from "./PofileModal";
+
 const LinkItems = [
   { name: "Home", icon: FaHome, route: "/home" },
   { name: "Chat", icon: BsFillChatLeftFill, route: "/chat" },
@@ -95,7 +97,7 @@ const NavItem = ({ icon, children, ...rest }) => {
   );
 };
 
-const MobileNav = ({ onOpen, ...rest }) => {
+const MobileNav = ({ onOpen, onProfileOpen, ...rest }) => {
   const { user, signOut } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -166,7 +168,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
               bg={useColorModeValue("white", "gray.900")}
               borderColor={useColorModeValue("gray.200", "gray.700")}
             >
-              <MenuItem>Profile</MenuItem>
+              <MenuItem onClick={() => onProfileOpen()}>Profile</MenuItem>
 
               <MenuDivider />
               <MenuItem
@@ -188,6 +190,12 @@ const MobileNav = ({ onOpen, ...rest }) => {
 
 const SidebarWithHeader = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isProfileOpen,
+    onOpen: onProfileOpen,
+    onClose: onProfileClose,
+  } = useDisclosure();
+  const { user } = useContext(AuthContext);
 
   return (
     <Box minH="100vh" bg={useColorModeValue("red.100", "gray.900")}>
@@ -208,13 +216,16 @@ const SidebarWithHeader = ({ children }) => {
         </DrawerContent>
       </Drawer>
       {/* mobilenav */}
-      <MobileNav onOpen={onOpen} />
+      <MobileNav onOpen={onOpen} onProfileOpen={onProfileOpen} />
       <Box ml={{ base: 0, md: 60 }} p="4">
         {/* Content */}
-        {/* <Outlet> */}
         {children}
-        {/* </Outlet> */}
       </Box>
+      <ProfileModal
+        onClose={onProfileClose}
+        isOpen={isProfileOpen}
+        user={user}
+      />
     </Box>
   );
 };

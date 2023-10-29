@@ -20,14 +20,15 @@ import {
   MenuItem,
   MenuList,
 } from "@chakra-ui/react";
+import { FaHome } from "react-icons/fa";
 import { FiMenu, FiChevronDown } from "react-icons/fi";
 import { BsFillChatLeftFill, BsFillCheckSquareFill } from "react-icons/bs";
 import { AuthContext } from "../context/AuthContext";
 import { supabase } from "../supabase";
 const LinkItems = [
+  { name: "Home", icon: FaHome, route: "/home" },
   { name: "Chat", icon: BsFillChatLeftFill, route: "/chat" },
   { name: "Form", icon: BsFillCheckSquareFill, route: "/form" },
-  { name: "Dashboard", icon: BsFillCheckSquareFill, route: "/dashboard" },
 ];
 
 const SidebarContent = ({ onClose, ...rest }) => {
@@ -44,7 +45,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
         <Text fontSize="md" fontWeight="bold">
-          Mindful AI
+          MindFul AI
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
@@ -169,7 +170,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
               borderColor={useColorModeValue("gray.200", "gray.700")}
             >
               <MenuItem onClick={navigateToHome}>Profile</MenuItem>
-              <MenuItem>Settings</MenuItem>
+
               <MenuDivider />
               <MenuItem
                 onClick={async () => {

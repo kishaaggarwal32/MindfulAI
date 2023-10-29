@@ -5,7 +5,7 @@ import Home from "./pages/Home";
 import Chat from "./pages/Chat";
 import { Wrapper } from "./components/Wrapper";
 import Form from "./pages/Form";
-import Dashboard from "./pages/Dashboard";
+
 import { supabase } from "./supabase";
 import { AuthContext } from "./context/AuthContext";
 
@@ -50,14 +50,6 @@ function App() {
             element={
               <Wrapper>
                 <Form />
-              </Wrapper>
-            }
-          />
-          <Route
-            path="/dashboard"
-            element={
-              <Wrapper>
-                <Dashboard />
               </Wrapper>
             }
           />

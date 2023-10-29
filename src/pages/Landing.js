@@ -29,6 +29,10 @@ export default function Landing() {
     });
   };
 
+  const handleLearnMoreClick = () => {
+    navigate("/learnmore");
+  };
+
   return (
     <Container maxW={"7xl"}>
       <Stack
@@ -98,7 +102,13 @@ export default function Landing() {
                 Get started
               </Button>
             )}
-            <Button rounded={"full"} size={"lg"} fontWeight={"normal"} px={6}>
+            <Button
+                rounded={"full"}
+                size={"lg"}
+                fontWeight={"normal"}
+                px={6}
+                onClick={handleLearnMoreClick}
+            >
               Learn More
             </Button>
           </Stack>

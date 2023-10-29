@@ -98,9 +98,6 @@ const NavItem = ({ icon, children, ...rest }) => {
 const MobileNav = ({ onOpen, ...rest }) => {
   const { user, signOut } = useContext(AuthContext);
   const navigate = useNavigate();
-  const navigateToHome = () => {
-    navigate("/home");
-  };
 
   return (
     <Flex
@@ -169,7 +166,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
               bg={useColorModeValue("white", "gray.900")}
               borderColor={useColorModeValue("gray.200", "gray.700")}
             >
-              <MenuItem onClick={navigateToHome}>Profile</MenuItem>
+              <MenuItem>Profile</MenuItem>
 
               <MenuDivider />
               <MenuItem

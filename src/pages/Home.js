@@ -73,7 +73,7 @@ const PersonalInformationForm = ({ onNext }) => {
 
 const AdditionalInformationForm = ({ onBack, onSubmit }) => {
   return (
-      <Box bg="#bde0fe" p={4} rounded="md" color="white">
+      <Box bg="#f1b7af" p={4} rounded="md" color="white">
         <Heading textAlign="center" fontWeight="bold" mb="2%">
           Additional Information
         </Heading>

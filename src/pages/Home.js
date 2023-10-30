@@ -1,133 +1,174 @@
-import React, { useContext, useState } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { useState } from 'react';
 import {
-  Box, // Replace Container with Box
-  Text,
+  Box,
+  ButtonGroup,
   Button,
+  Heading,
+  Flex,
   FormControl,
   FormLabel,
   Input,
   Select,
-  Grid,
-  GridItem,
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
-} from "@chakra-ui/react";
+  Progress,
+  ChakraProvider,
+  extendTheme,
+} from '@chakra-ui/react';
+import { useToast } from '@chakra-ui/react';
 
-export default function Home() {
-  const { user } = useContext(AuthContext);
-  const [formData, setFormData] = useState({
-    first_name: "",
-    last_name: "",
-    gender: "",
-    age: "",
-    marital_status: "false",
-    employment_status: "false",
-    education: "true",
-  });
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+const theme = extendTheme({
+  styles: {
+    global: {
+      body: {
+        bg: '#f59e94',
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
+      },
+    },
+  },
+});
+
+const PersonalInformationForm = ({ onNext }) => {
+  return (
+      <Box bg="#f1b7af" p={4} rounded="md" color="white">
+        <Heading textAlign="center" fontWeight="bold" mb="2%">
+          Personal Information
+        </Heading>
+        <FormControl>
+          <FormLabel htmlFor="first-name" fontWeight="normal">
+            First Name
+          </FormLabel>
+          <Input id="first-name" placeholder="First Name" />
+        </FormControl>
+
+        <FormControl mt="2%">
+          <FormLabel htmlFor="last-name" fontWeight="normal">
+            Last Name
+          </FormLabel>
+          <Input id="last-name" placeholder="Last Name" />
+        </FormControl>
+
+        <FormControl mt="2%">
+          <FormLabel htmlFor="gender" fontWeight="normal">
+            Gender
+          </FormLabel>
+          <Select id="gender" placeholder="Select Gender">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </Select>
+        </FormControl>
+
+        <FormControl mt="2%">
+          <FormLabel htmlFor="age" fontWeight="normal">
+            Age
+          </FormLabel>
+          <Input id="age" type="number" placeholder="Age" />
+        </FormControl>
+
+        <Button mt="5%" colorScheme="teal" variant="outline" onClick={onNext}>
+          Next
+        </Button>
+      </Box>
+  );
+};
+
+const AdditionalInformationForm = ({ onBack, onSubmit }) => {
+  return (
+      <Box bg="#bde0fe" p={4} rounded="md" color="white">
+        <Heading textAlign="center" fontWeight="bold" mb="2%">
+          Additional Information
+        </Heading>
+        <FormControl>
+          <FormLabel htmlFor="marital-status" fontWeight="normal">
+            Marital Status
+          </FormLabel>
+          <Select id="marital-status" placeholder="Select Status">
+            <option value="true">True</option>
+            <option value="false">False</option>
+          </Select>
+        </FormControl>
+
+        <FormControl mt="2%">
+          <FormLabel htmlFor="employment-status" fontWeight="normal">
+            Employment Status
+          </FormLabel>
+          <Select id="employment-status" placeholder="Select Status">
+            <option value="true">True</option>
+            <option value="false">False</option>
+          </Select>
+        </FormControl>
+
+        <FormControl mt="2%">
+          <FormLabel htmlFor="education" fontWeight="normal">
+            Education
+          </FormLabel>
+          <Select id="education" placeholder="Select Education Level">
+            <option value="true">True</option>
+            <option value="false">False</option>
+          </Select>
+        </FormControl>
+
+        <ButtonGroup mt="5%">
+          <Flex w="100%" justifyContent="space-between">
+            <Button
+                onClick={onBack}
+                isDisabled={false}
+                colorScheme="teal"
+                variant="outline"
+                w="7rem"
+                mr="5%"
+            >
+              Back
+            </Button>
+            <Button
+                onClick={onSubmit}
+                colorScheme="teal"
+                variant="outline"
+                w="7rem"
+            >
+              Submit
+            </Button>
+          </Flex>
+        </ButtonGroup>
+      </Box>
+  );
+};
+
+export default function TwoStageForm() {
+  const toast = useToast();
+  const [step, setStep] = useState(1);
+  const [progress, setProgress] = useState(0);
+
+  const handleNext = () => {
+    setStep(2);
+    setProgress(50);
+  };
+
+  const handleBack = () => {
+    setStep(1);
+    setProgress(0);
+  };
+
+  const handleSubmit = () => {
+    // Handle form submission here
+    toast({
+      title: 'Data Submitted',
+      description: 'Your data has been submitted successfully.',
+      status: 'success',
+      duration: 3000,
+      isClosable: true,
     });
   };
 
-  const handleSubmit = async () => {
-    // Create the data payload for the cURL request
-    const data = new URLSearchParams(formData);
-
-    try {
-      const response = await fetch(
-          "https://backend-mindfulai.azurewebsites.net/mongo_db/add_personal_information_by_email",
-          {
-            method: "POST",
-            headers: {
-              accept: "application/json",
-              "email-id": user.email,
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: data,
-          }
-      );
-
-      if (response.ok) {
-        setSuccessMessage("Data sent successfully.");
-        setErrorMessage("");
-      } else {
-        setSuccessMessage("");
-        setErrorMessage("Failed to send data to the server.");
-      }
-    } catch (error) {
-      setSuccessMessage("");
-      setErrorMessage("An error occurred: " + error.message);
-    }
-  };
-
   return (
-      <Box // Use Box for the container
-          bg="pink.100" // Set the background color to light pink
-          p={4} // Add padding
-          borderRadius="md" // Add some border radius for a nicer look
-      >
-        <Text fontSize="2xl" textAlign="center" mb="5">
-          Welcome to MindFulAI
-        </Text>
-        {user ? (
-            <div>
-              {successMessage && (
-                  <Alert status="success" mt="4">
-                    <AlertIcon />
-                    <AlertTitle mr={2}>Success!</AlertTitle>
-                    <AlertDescription>{successMessage}</AlertDescription>
-                  </Alert>
-              )}
-              {errorMessage && (
-                  <Alert status="error" mt="4">
-                    <AlertIcon />
-                    <AlertTitle mr={2}>Error!</AlertTitle>
-                    <AlertDescription>{errorMessage}</AlertDescription>
-                  </Alert>
-              )}
-              <form>
-                <Grid templateColumns="repeat(2, 1fr)" gap={4}>
-                  <GridItem>
-                    <FormControl>
-                      <FormLabel>First Name</FormLabel>
-                      <Input
-                          type="text"
-                          name="first_name"
-                          value={formData.first_name}
-                          onChange={handleInputChange}
-                          borderColor="black"
-                      />
-                    </FormControl>
-                  </GridItem>
-                  {/* Add similar styling for other form fields */}
-                  {/* ... (rest of the form fields) ... */}
-                  <GridItem colSpan={2} textAlign="center">
-                    <Button
-                        mt="1rem"
-                        onClick={handleSubmit}
-                        colorScheme="teal"
-                        variant="outline"
-                    >
-                      Submit
-                    </Button>
-                  </GridItem>
-                </Grid>
-              </form>
-            </div>
-        ) : (
-            <Text fontSize="xl" textAlign="center" mt="4">
-              Please sign in to view this content.
-            </Text>
-        )}
-      </Box>
+      <ChakraProvider theme={theme}>
+        <Box p={4} rounded="md" color="white">
+          <Progress hasStripe value={progress} mb="5%" mx="5%" isAnimated />
+          {step === 1 ? (
+              <PersonalInformationForm onNext={handleNext} />
+          ) : step === 2 ? (
+              <AdditionalInformationForm onBack={handleBack} onSubmit={handleSubmit} />
+          ) : null}
+        </Box>
+      </ChakraProvider>
   );
 }
